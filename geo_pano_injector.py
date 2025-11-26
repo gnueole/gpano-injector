@@ -4,7 +4,7 @@ import sys
 from PIL import Image, ExifTags
 
 VERSION = "1.2.0"
-SIGNATURE = "Antigravity EXIF Reader"
+SIGNATURE = "Geo Pano Injector"
 MAX_FILE_SIZE = 30 * 1024 * 1024  # 30 MB
 
 
