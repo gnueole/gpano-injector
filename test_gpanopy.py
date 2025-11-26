@@ -2,10 +2,10 @@ import unittest
 import os
 import subprocess
 import sys
-from geo_pano_injector import get_exif_data, MAX_FILE_SIZE
+from gpanopy import get_exif_data, MAX_FILE_SIZE
 
 
-class TestGeoPanoInjector(unittest.TestCase):
+class TestGPanopy(unittest.TestCase):
     def setUp(self):
         self.test_file = "test_exif.jpg"
         self.large_file = "large_test.jpg"
@@ -24,25 +24,25 @@ class TestGeoPanoInjector(unittest.TestCase):
     def test_cli_help(self):
         """Test that running without args prints help."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py"], capture_output=True, text=True
+            [sys.executable, "gpanopy.py"], capture_output=True, text=True
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("usage: geo_pano_injector.py", result.stdout)
+        self.assertIn("usage: gpanopy.py", result.stdout)
 
     def test_cli_version(self):
         """Test -v option."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-v"],
+            [sys.executable, "gpanopy.py", "-v"],
             capture_output=True,
             text=True,
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Geo Pano Injector", result.stdout)
+        self.assertIn("GPanopy", result.stdout)
 
     def test_cli_valid_file(self):
         """Test -f with valid file."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-f", self.test_file],
+            [sys.executable, "gpanopy.py", "-f", self.test_file],
             capture_output=True,
             text=True,
         )
@@ -53,7 +53,7 @@ class TestGeoPanoInjector(unittest.TestCase):
     def test_cli_large_file(self):
         """Test -f with large file fails."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-f", self.large_file],
+            [sys.executable, "gpanopy.py", "-f", self.large_file],
             capture_output=True,
             text=True,
         )
@@ -63,7 +63,7 @@ class TestGeoPanoInjector(unittest.TestCase):
     def test_cli_missing_file(self):
         """Test -f with missing file."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-f", "nonexistent.jpg"],
+            [sys.executable, "gpanopy.py", "-f", "nonexistent.jpg"],
             capture_output=True,
             text=True,
         )
@@ -73,7 +73,7 @@ class TestGeoPanoInjector(unittest.TestCase):
     def test_cli_positional_arg(self):
         """Test file passed as positional argument."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", self.test_file],
+            [sys.executable, "gpanopy.py", self.test_file],
             capture_output=True,
             text=True,
         )
@@ -100,7 +100,7 @@ class TestGeoPanoInjector(unittest.TestCase):
 
         # 2. Run command with -e BEFORE the file argument as requested
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-e", self.test_file],
+            [sys.executable, "gpanopy.py", "-e", self.test_file],
             capture_output=True,
             text=True,
         )
@@ -133,7 +133,7 @@ class TestGeoPanoInjector(unittest.TestCase):
         # Run with advanced params
         cmd = [
             sys.executable,
-            "geo_pano_injector.py",
+            "gpanopy.py",
             "-e",
             self.test_file,
             "--heading",
@@ -169,13 +169,13 @@ class TestGeoPanoInjector(unittest.TestCase):
             os.remove(output_file)
 
         subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-e", self.test_file],
+            [sys.executable, "gpanopy.py", "-e", self.test_file],
             capture_output=True,
         )
 
         # 2. Read it back
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-f", output_file],
+            [sys.executable, "gpanopy.py", "-f", output_file],
             capture_output=True,
             text=True,
         )
@@ -191,7 +191,7 @@ class TestGeoPanoInjector(unittest.TestCase):
     def test_help_contains_version(self):
         """Test that help message contains the version number."""
         result = subprocess.run(
-            [sys.executable, "geo_pano_injector.py", "-h"],
+            [sys.executable, "gpanopy.py", "-h"],
             capture_output=True,
             text=True,
         )
