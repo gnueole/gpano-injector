@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# Author: Éole (hi@eole.me)
+# Release: 1.2.0
+
 import argparse
 import os
 import sys
