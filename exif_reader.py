@@ -3,7 +3,7 @@ import os
 import sys
 from PIL import Image, ExifTags
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 SIGNATURE = "Antigravity EXIF Reader"
 MAX_FILE_SIZE = 30 * 1024 * 1024  # 30 MB
 
@@ -31,6 +31,38 @@ def get_exif_data(image_path):
         return decoded_exif
     except Exception as e:
         print(f"Error reading EXIF data: {e}")
+        return None
+
+
+def get_xmp_data(image_path):
+    """
+    Extracts XMP metadata from the image.
+    Returns a dictionary of {tag_name: value} or None.
+    """
+    try:
+        with Image.open(image_path) as img:
+            # Pillow >= 8.2.0 supports getxmp()
+            if hasattr(img, "getxmp"):
+                xmp = img.getxmp()
+                if xmp:
+                    flat_xmp = {}
+                    for ns, tags in xmp.items():
+                        for key, value in tags.items():
+                            flat_xmp[f"{key}"] = value
+                    return flat_xmp
+
+            # Fallback: Check img.info for raw XMP
+            if "xmp" in img.info:
+                try:
+                    # Try to decode raw XMP bytes to string
+                    raw_xmp = img.info["xmp"].decode("utf-8")
+                    # Return as a single key for display
+                    return {"Raw XMP": raw_xmp}
+                except Exception:
+                    return {"Raw XMP Data": f"{len(img.info['xmp'])} bytes (binary)"}
+
+            return None
+    except Exception as e:
         return None
 
 
@@ -80,8 +112,16 @@ def add_photosphere_metadata(image_path, heading=None, pitch=None, roll=None, fo
             # Preserve original EXIF if present
             exif = img.getexif()
 
-            # Save with XMP
-            img.save(new_filename, "JPEG", exif=exif, xmp=xmp_data.encode("utf-8"))
+            # Save with XMP and High Quality
+            img.save(
+                new_filename,
+                "JPEG",
+                exif=exif,
+                xmp=xmp_data.encode("utf-8"),
+                quality=100,
+                subsampling=0,
+                optimize=True,
+            )
             print(f"Successfully created Photosphere image: {new_filename}")
             return new_filename
 
@@ -92,7 +132,7 @@ def add_photosphere_metadata(image_path, heading=None, pitch=None, roll=None, fo
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Read and display EXIF data from a JPG file."
+        description=f"Manage Google Photosphere XMP metadata and display EXIF data. v{VERSION}"
     )
     parser.add_argument("input_file", nargs="?", help="Path to the JPG file")
     parser.add_argument("-f", "--file", help="Path to the JPG file (alternative)")
@@ -151,18 +191,36 @@ def main():
                 fov=args.fov,
             )
         else:
+            # Display EXIF
             exif_data = get_exif_data(file_path)
+
+            # Display XMP
+            xmp_data = get_xmp_data(file_path)
 
             if exif_data:
                 # Find the longest key for alignment
                 max_key_len = (
                     max(len(str(k)) for k in exif_data.keys()) if exif_data else 0
                 )
+                # Adjust for XMP keys if they are longer
+                if xmp_data:
+                    max_xmp_len = max(len(str(k)) for k in xmp_data.keys())
+                    max_key_len = max(max_key_len, max_xmp_len)
 
                 for key, value in sorted(exif_data.items(), key=lambda x: str(x[0])):
                     print(f"{str(key):<{max_key_len}} : {value}")
             else:
                 print("No EXIF data found.")
+
+            if xmp_data:
+                print("-" * 40)
+                print("XMP Metadata:")
+                # Recalculate max_key_len if EXIF was empty
+                if not exif_data:
+                    max_key_len = max(len(str(k)) for k in xmp_data.keys())
+
+                for key, value in sorted(xmp_data.items(), key=lambda x: str(x[0])):
+                    print(f"{str(key):<{max_key_len}} : {value}")
     else:
         parser.print_help()
 

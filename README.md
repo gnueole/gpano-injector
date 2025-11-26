@@ -1,14 +1,17 @@
 # Antigravity EXIF Reader
 
-A Python command-line utility to read and display EXIF metadata from JPEG files, with support for injecting Google Photosphere XMP metadata.
+A Python command-line utility designed primarily to **inject and control Google Photosphere XMP metadata** for 360° panoramas. It also reads and displays EXIF and XMP metadata from JPEG files.
 
-**Release 1.1.0 (2025-11-26)**
+**Release 1.2.0 (2025-11-26)**
 **Developed by: Éole (hi@eole.me)**
+
+For more details on the metadata specification, see the [official Google Photo Sphere XMP metadata documentation](https://developers.google.com/streetview/spherical-metadata).
 
 ## Features
 
-- **Read EXIF**: Displays EXIF tags in a clean, aligned format.
+- **Read EXIF & XMP**: Displays EXIF and XMP metadata (including Photosphere tags) in a clean, aligned format.
 - **Photosphere Support**: Inject Google Photosphere XMP metadata (`GPano`) to make images recognized as 360° panoramas by viewers like Google Photos.
+- **High Quality**: Generates 360° images with maximum quality settings (100% quality, no subsampling) to preserve image fidelity.
 - **Advanced XMP**: Configure Heading, Pitch, Roll, and Field of View.
 - **Safety**: Includes a file size safety check (max 30MB).
 
