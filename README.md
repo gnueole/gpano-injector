@@ -1,52 +1,22 @@
-- **Photosphere Support**: Inject Google Photosphere XMP metadata (`GPano`) to make images recognized as 360° panoramas by viewers like Google Photos.
-- **High Quality**: Generates 360° images with maximum quality settings (100% quality, no subsampling) to preserve image fidelity.
-- **Advanced XMP**: Configure Heading, Pitch, Roll, and Field of View.
-- **Safety**: Includes a file size safety check (max 30MB).
+# Geo Pano Injector
 
-## Installation
+**Geo Pano Injector** is a suite of tools designed to inject **Google Photo Sphere (GPano)** XMP metadata into JPEG images. This metadata ensures that your 360° panoramic images are correctly recognized and displayed by Google Photos, Facebook, and other compatible 360° viewers. For more details on the metadata used, refer to the [Google Photo Sphere XMP Metadata documentation](https://developers.google.com/streetview/spherical-metadata).
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/gnueole/pyexif.git
-    cd pyexif
-    ```
+This repository contains two distinct implementations to suit your workflow:
 
-2.  **Install dependencies:**
-    This tool requires `Pillow` (PIL) for image processing.
-    ```bash
-    pip install Pillow
-    ```
+## Subprojects
 
-## Usage
+### 1. [gpanojs](./gpanojs) (Web Interface)
+A modern, minimalist web-based tool that runs entirely in your browser.
+- **Features**: Drag & drop interface, EXIF/XMP viewer, dark mode, and instant download.
+- **Usage**: Simply open `gpanojs/index.html` in any web browser. No installation required.
+- **Output**: Saves images with a `-360web` suffix.
 
-### 1. Read EXIF and XMP Data
-Display metadata from a JPG file.
-```bash
-python gpanopy.py image.jpg
-# OR
-python gpanopy.py -f image.jpg
-```
+### 2. [gpanopy](./gpanopy) (Python CLI)
+A powerful command-line interface tool for batch processing and automation.
+- **Features**: Read metadata, inject GPano tags, and configure advanced parameters like Heading, Pitch, Roll, and Field of View.
+- **Usage**: Run via `python gpanopy.py`. Requires Python and Pillow.
+- **Output**: Saves images with a `-360` suffix and preserves maximum quality.
 
-### 2. Create a Photosphere (Inject XMP)
-Inject Google Photosphere metadata into an image. This creates a new file with `-360` suffix (e.g., `image-360.jpg`).
-```bash
-python gpanopy.py -e image.jpg
-```
-
-### 3. Advanced XMP Parameters
-Control specific pose and field of view parameters.
-```bash
-python gpanopy.py -e image.jpg --heading 180 --pitch 10 --roll 5 --fov 90
-```
-
-### 4. Check Version
-```bash
-python gpanopy.py -v
-```
-
-## Testing
-
-Run the automated test suite:
-```bash
-python test_gpanopy.py
-```
+## Authors
+Antigravity & Éole <hi@eole.me>

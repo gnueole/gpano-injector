@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo Pano Injector</title>
+    <meta name="description"
+        content="View EXIF/XMP metadata and inject Google Photo Sphere (GPano) parameters for correct 360° viewing in Google Photos.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="vendor/lucide.js"></script>
+
+    <!-- EXIF Library -->
+    <script src="vendor/exif-reader.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i data-lucide="globe-2" class="logo-icon"></i>
+                <div class="logo-text">
+                    <h1>Geo Pano Injector</h1>
+                    <p class="tagline">Check options for more info</p>
+                </div>
+            </div>
+            <button id="menu-btn" class="icon-btn" aria-label="Menu">
+                <i data-lucide="menu"></i>
+            </button>
+        </header>
+
+        <!-- Sidebar / Menu -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Settings</h2>
+                <button id="close-menu-btn" class="icon-btn" aria-label="Close Menu">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div class="setting-item">
+                    <span>Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="info-section">
+                    <p class="description">
+                        This tool displays EXIF and XMP metadata and allows you to inject <strong>Google Photo
+                            Sphere</strong> parameters.
+                        This ensures your 360° panoramas are previewed correctly in Google Photos and other viewers.
+                    </p>
+                    <a href="https://developers.google.com/streetview/spherical-metadata" target="_blank" class="link">
+                        <i data-lucide="external-link" size="14"></i> GPano Documentation
+                    </a>
+                </div>
+                <div class="version-info">
+                    <p>Version <span id="version-display">1.3.0</span></p>
+                    <p class="signature">Made with ❤️ by Antigravity & Éole</p>
+                </div>
+            </div>
+        </div>
+        <div id="overlay" class="overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Area -->
+            <section id="upload-section" class="upload-section">
+                <div id="dropzone" class="dropzone">
+                    <i data-lucide="upload-cloud" class="drop-icon"></i>
+                    <h3>Drag & Drop your JPEG here</h3>
+                    <p>or</p>
+                    <button id="browse-btn" class="btn primary-btn">Browse Files</button>
+                    <input type="file" id="file-input" accept="image/jpeg" hidden>
+                </div>
+            </section>
+
+            <!-- Results Area (Hidden by default) -->
+            <section id="results-section" class="results-section hidden">
+                <div class="image-preview-wrapper">
+                    <div class="image-preview-container">
+                        <img id="image-preview" src="" alt="Uploaded Image">
+                        <button id="close-preview-btn" class="icon-btn close-preview" aria-label="Close Image">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                    <button id="download-btn" class="btn success-btn hidden">
+                        <i data-lucide="download"></i> Download
+                    </button>
+                </div>
+
+                <div class="exif-data-container">
+                    <h2>Metadata</h2>
+                    <div id="exif-grid" class="exif-grid">
+                        <!-- EXIF items will be injected here -->
+                    </div>
+
+                    <div class="actions-container">
+                        <button id="reset-btn" class="btn secondary-btn">
+                            <i data-lucide="rotate-ccw"></i> Reset
+                        </button>
+                        <button id="gpano-btn" class="btn primary-btn">
+                            <i data-lucide="globe"></i> Apply GPano Params
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="vendor/jpeg-xmp-writer-global.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
